@@ -1,0 +1,1878 @@
+/* ============================================================
+   KASIR PINTAR — Design System CSS
+   Style: Minimalism & Swiss Style
+   Density: 8/10 (Dense/Dashboard)
+   Typography: Rubik (heading) + Nunito Sans (body)
+   ============================================================ */
+
+/* === RESET === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* === DESIGN TOKENS === */
+:root {
+  /* === PALET RESMI DIKO (MASTER) === */
+  /* Enamel (Warna Merek) */
+  --color-enamel-50: #F0F5F6;
+  --color-enamel-100: #D9E7E9;
+  --color-enamel-400: #6C9DA4;
+  --color-enamel-600: #205C68;
+  --color-enamel-900: #16343A;
+
+  /* Kertas (Netral) */
+  --color-kertas: #FFFFFF;
+  --color-latar: #FAFAF8;
+  --color-latar-2: #F1F0EC;
+  --color-garis: #E4E1DA;
+  --color-redup: #A3A096;
+  --color-teks-2: #6B675E;
+  --color-teks: #16343A;
+
+  /* Status (Hanya dua warna status, bukan tiga) */
+  --color-status-tersimpan: #6B675E;
+  --color-status-menunggu: #A06A1B;
+  --color-status-gagal: #B8504B;
+
+  /* Pemetaan Semantik Desain Diko */
+  --color-primary: var(--color-enamel-900);
+  --color-on-primary: #FFFFFF;
+  --color-secondary: var(--color-latar-2);
+  --color-on-secondary: var(--color-teks);
+  --color-accent: var(--color-enamel-600);
+  --color-accent-hover: #1b4b55;
+  --color-on-accent: #FFFFFF;
+  --color-background: var(--color-latar);
+  --color-foreground: var(--color-teks);
+  --color-card: var(--color-kertas);
+  --color-card-foreground: var(--color-teks);
+  --color-muted: var(--color-latar-2);
+  --color-muted-foreground: var(--color-teks-2);
+  --color-border: var(--color-garis);
+  --color-destructive: var(--color-status-gagal);
+  --color-on-destructive: #FFFFFF;
+  --color-ring: var(--color-enamel-400);
+
+  /* Aksi Utama (Satu per layar) */
+  --color-action-main: var(--color-enamel-600);
+  --color-action-main-hover: #164650;
+  --color-on-action-main: #FFFFFF;
+
+  /* Status sync outbox */
+  --color-sync-ok: var(--color-status-tersimpan);
+  --color-sync-pending: var(--color-status-menunggu);
+  --color-sync-error: var(--color-status-gagal);
+
+  /* Touch Ergonomics Diko */
+  --touch-target-min: 48px;
+  --touch-numpad: 60px;
+
+  /* Spasi — Dense/Dashboard scale */
+  --space-xs: 2px;
+  --space-sm: 4px;
+  --space-md: 8px;
+  --space-lg: 12px;
+  --space-xl: 16px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Tipografi Diko */
+  --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+
+  /* Ukuran font — dense scale */
+  --text-xs: 0.6875rem;    /* 11px */
+  --text-sm: 0.75rem;      /* 12px */
+  --text-base: 0.8125rem;  /* 13px */
+  --text-md: 0.875rem;     /* 14px */
+  --text-lg: 1rem;         /* 16px */
+  --text-xl: 1.125rem;     /* 18px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 1.875rem;    /* 30px */
+
+  /* Line height */
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  /* Transisi */
+  --transition-fast: 120ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+
+  /* Layout kasir */
+  --sidebar-width: 64px;
+  --cart-width: 380px;
+  --header-height: 52px;
+}
+
+/* === BASE === */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+  overflow: hidden; /* Kasir = layar penuh, tidak perlu scroll body */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: var(--color-foreground);
+}
+
+/* === LAYOUT UTAMA KASIR === */
+
+/* App shell — layar penuh, sidebar kiri */
+.app-shell {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Sidebar navigasi — dark, narrow */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  background: var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-md) 0;
+  gap: var(--space-xs);
+  z-index: 10;
+}
+
+.sidebar-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-on-accent);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.sidebar-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.sidebar-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.sidebar-btn.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+.sidebar-btn.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: var(--color-accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.sidebar-spacer {
+  flex: 1;
+}
+
+/* Area konten utama */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* Header bar */
+.header-bar {
+  height: var(--header-height);
+  min-height: var(--header-height);
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-xl);
+  gap: var(--space-lg);
+}
+
+.header-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
+.header-spacer {
+  flex: 1;
+}
+
+/* Indikator sync di header — kecil, informatif */
+.sync-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  background: transparent;
+}
+
+.sync-indicator--ok {
+  color: var(--color-sync-ok);
+}
+
+.sync-indicator--pending {
+  color: var(--color-sync-pending);
+}
+
+.sync-indicator--error {
+  color: var(--color-sync-error);
+}
+
+.sync-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Info user di header */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding-left: var(--space-lg);
+  border-left: 1px solid var(--color-border);
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-muted-foreground);
+}
+
+.user-name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-foreground);
+}
+
+/* === LAYOUT KASIR (split view) === */
+
+.cashier-layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Panel kiri — katalog produk */
+.catalog-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* Search bar katalog */
+.catalog-search {
+  padding: var(--space-lg) var(--space-xl);
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--space-lg);
+  padding-left: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  color: var(--color-foreground);
+  background: var(--color-background);
+  transition: border-color var(--transition-fast);
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(3, 105, 161, 0.12);
+}
+
+.search-input::placeholder {
+  color: var(--color-muted-foreground);
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  width: 16px;
+  height: 16px;
+  color: var(--color-muted-foreground);
+  pointer-events: none;
+}
+
+/* Tab kategori */
+.category-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px var(--space-lg);
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.category-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-muted-foreground);
+  background: var(--color-card);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.category-tab:hover {
+  background: var(--color-muted);
+  color: var(--color-foreground);
+  border-color: #CBD5E1;
+}
+
+.category-tab.active {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.15);
+}
+
+/* === GRID PRODUK DIKO (RESPONSIF MOBILE & TABLET) === */
+.catalog-grid-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md) var(--space-lg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.catalog-grid-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+
+.catalog-grid-wrapper::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 12px;
+  align-content: start;
+}
+
+/* Kartu produk — touch-first, rapi, taktil */
+.product-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 115px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.08);
+  transform: translateY(-1px);
+}
+
+.product-card:active {
+  transform: scale(0.97);
+  background: #F8FAFC;
+}
+
+.product-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.product-cat-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--color-muted);
+  color: var(--color-muted-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-variant-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--color-accent);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.2px;
+}
+
+.product-card-name {
+  font-family: var(--font-heading);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-foreground);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 2px 0 auto;
+}
+
+.product-card-price {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 4px;
+  border-top: 1px dashed var(--color-border);
+}
+
+.product-card-name {
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--color-foreground);
+  line-height: var(--leading-tight);
+  /* Truncate pada 2 baris */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-card-price {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-accent);
+  margin-top: auto;
+}
+
+/* === PANEL KERANJANG (kanan) === */
+
+.cart-panel {
+  width: var(--cart-width);
+  min-width: var(--cart-width);
+  background: var(--color-card);
+  border-left: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.02);
+}
+
+.cart-header {
+  padding: 14px var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  min-height: 52px;
+}
+
+.cart-title {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-foreground);
+  letter-spacing: -0.2px;
+}
+
+.cart-badge {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: var(--radius-full);
+  background: var(--color-enamel-100);
+  color: var(--color-enamel-900);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-enamel-400);
+}
+
+.cart-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-destructive);
+  background: #FEF2F2;
+  border: 1px solid #FEE2E2;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.cart-clear-btn:hover {
+  background: #FEE2E2;
+  border-color: #FECACA;
+  color: #B91C1C;
+}
+
+.cart-clear-btn:active {
+  transform: scale(0.96);
+}
+
+/* Daftar item keranjang */
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+  background: #FFFFFF;
+}
+
+.cart-items::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cart-items::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+/* Kartu item keranjang — 2 baris rapi & taktil */
+.cart-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px var(--space-xl);
+  border-bottom: 1px solid #F1F5F9;
+  background: #FFFFFF;
+  transition: background var(--transition-fast);
+}
+
+.cart-item:hover {
+  background: #F8FAFC;
+}
+
+/* Baris atas: nama produk dan subtotal */
+.cart-item-row-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.cart-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cart-item-name {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-foreground);
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.cart-item-variant {
+  font-size: 11.5px;
+  color: var(--color-accent);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cart-item-total,
+.cart-item-subtotal {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-foreground);
+  white-space: nowrap;
+  letter-spacing: -0.2px;
+}
+
+/* Baris bawah: unit price dan controls (stepper + delete) */
+.cart-item-row-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cart-item-unit-price,
+.cart-item-price {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-muted-foreground);
+}
+
+.cart-item-controls,
+.cart-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Kapsul Stepper Qty Terintegrasi */
+.cart-stepper {
+  display: inline-flex;
+  align-items: center;
+  background: #F1F5F9;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  height: 32px;
+  padding: 1px;
+}
+
+.stepper-btn,
+.cart-item-btn {
+  width: 30px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: #334155;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.stepper-btn:hover,
+.cart-item-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.stepper-btn:active,
+.cart-item-btn:active {
+  transform: scale(0.92);
+}
+
+.stepper-btn:disabled,
+.cart-item-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.stepper-qty,
+.cart-item-qty {
+  min-width: 28px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-foreground);
+  user-select: none;
+}
+
+/* Tombol Hapus Baris */
+.cart-item-delete,
+.cart-item-remove {
+  width: 30px;
+  height: 30px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94A3B8;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.cart-item-delete:hover,
+.cart-item-remove:hover {
+  background: #FEE2E2;
+  border-color: #FECACA;
+  color: var(--color-destructive);
+}
+
+.cart-item-delete:active,
+.cart-item-remove:active {
+  transform: scale(0.92);
+}
+
+/* Keranjang kosong */
+.cart-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted-foreground);
+  gap: 8px;
+  padding: var(--space-3xl) var(--space-xl);
+  text-align: center;
+}
+
+.cart-empty-icon {
+  width: 48px;
+  height: 48px;
+  color: #CBD5E1;
+  margin-bottom: 4px;
+}
+
+.cart-empty-title {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.cart-empty-text {
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+/* Footer / Ringkasan Keranjang */
+.cart-summary,
+.cart-footer {
+  border-top: 1px solid var(--color-border);
+  padding: 16px var(--space-xl);
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.summary-row,
+.cart-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.summary-label,
+.cart-summary-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-muted-foreground);
+}
+
+.summary-value,
+.cart-summary-value {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
+/* Tombol Diskon Transaksi Bergaya Chip */
+.summary-discount-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-enamel-900);
+  background: var(--color-enamel-50);
+  border: 1px dashed var(--color-enamel-400);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.summary-discount-btn:hover {
+  background: var(--color-enamel-100);
+  border-color: var(--color-enamel-600);
+}
+
+.summary-discount-btn:active {
+  transform: scale(0.97);
+}
+
+/* Total Section */
+.summary-total,
+.cart-summary-row--total {
+  padding-top: 10px;
+  border-top: 1px dashed var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+}
+
+.summary-total-label {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--color-foreground);
+  text-transform: uppercase;
+}
+
+.summary-total .total-amount,
+.summary-total-amount,
+.cart-summary-row--total .cart-summary-value {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-foreground);
+  letter-spacing: -0.5px;
+}
+
+/* Tombol Bayar Sekarang — Standar Komersial POS (Emerald Green) */
+.pay-btn,
+.btn-pay {
+  width: 100%;
+  min-height: 54px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 150ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+  letter-spacing: 0.01em;
+  user-select: none;
+  outline: none;
+}
+
+.pay-btn:hover,
+.btn-pay:hover {
+  background: linear-gradient(135deg, #047857 0%, #065F46 100%);
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.4);
+  transform: translateY(-1px);
+}
+
+.pay-btn:active,
+.btn-pay:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+}
+
+.pay-btn:disabled,
+.btn-pay:disabled {
+  background: #E2E8F0;
+  color: #94A3B8;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+.pay-btn .kbd-hint,
+.btn-pay .kbd-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.22);
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: none;
+}
+
+/* Tombol Konfirmasi Pembayaran Modal (Selesaikan Tunai & Konfirmasi QRIS) */
+.btn-pay-confirm {
+  min-height: 48px;
+  padding: 0 var(--space-xl);
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  font-weight: 800;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+  cursor: pointer;
+  transition: all 150ms ease;
+  user-select: none;
+}
+
+.btn-pay-confirm:hover:not(:disabled) {
+  background: linear-gradient(135deg, #047857 0%, #065F46 100%);
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-pay-confirm:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+}
+
+.btn-pay-confirm:disabled {
+  background: #E2E8F0 !important;
+  color: #94A3B8 !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* === TOMBOL UMUM === */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--text-md);
+}
+
+.btn-primary:hover {
+  filter: brightness(0.9);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-foreground);
+  border: 1px solid var(--color-border);
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--text-md);
+}
+
+.btn-secondary:hover {
+  background: var(--color-muted);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-muted-foreground);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+}
+
+.btn-ghost:hover {
+  background: var(--color-muted);
+  color: var(--color-foreground);
+}
+
+.btn-danger {
+  background: var(--color-destructive);
+  color: var(--color-on-destructive);
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--text-md);
+}
+
+.btn-danger:hover {
+  filter: brightness(0.9);
+}
+
+/* === MODAL / DIALOG === */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn var(--transition-fast) ease;
+}
+
+.modal {
+  background: var(--color-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  max-width: 480px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp var(--transition-base) ease;
+}
+
+.modal-header {
+  padding: var(--space-xl) var(--space-2xl);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.modal-close {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-muted-foreground);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+  background: var(--color-muted);
+  color: var(--color-foreground);
+}
+
+.modal-body {
+  padding: var(--space-2xl);
+}
+
+.modal-footer {
+  padding: var(--space-xl) var(--space-2xl);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-md);
+}
+
+/* === INPUT / FORM === */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.form-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-foreground);
+}
+
+.form-input {
+  height: 36px;
+  padding: 0 var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  color: var(--color-foreground);
+  background: var(--color-card);
+  transition: border-color var(--transition-fast);
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(3, 105, 161, 0.12);
+}
+
+.form-input::placeholder {
+  color: var(--color-muted-foreground);
+}
+
+/* PIN input — ukuran besar untuk login kasir */
+.pin-input {
+  width: 56px;
+  height: 64px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-foreground);
+  background: var(--color-card);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  -webkit-text-security: disc;
+}
+
+.pin-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.15);
+}
+
+/* Numpad untuk kasir */
+.numpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  max-width: 280px;
+}
+
+.numpad-btn {
+  height: 56px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--color-foreground);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.numpad-btn:hover {
+  background: var(--color-muted);
+}
+
+.numpad-btn:active {
+  transform: scale(0.95);
+  background: var(--color-border);
+}
+
+.numpad-btn--action {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent);
+}
+
+.numpad-btn--action:hover {
+  filter: brightness(0.9);
+}
+
+.numpad-btn--danger {
+  color: var(--color-destructive);
+}
+
+/* === UTILITAS === */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* === ANIMASI === */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* === LOGIN PAGE === */
+
+.login-page {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background);
+}
+
+.login-card {
+  background: var(--color-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-3xl);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xl);
+}
+
+.login-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-on-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--text-2xl);
+}
+
+.login-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-foreground);
+  text-align: center;
+}
+
+.login-subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-muted-foreground);
+  text-align: center;
+  margin-top: calc(-1 * var(--space-lg));
+}
+
+.pin-display {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+}
+
+/* === TOAST / SNACKBAR === */
+
+.toast-container {
+  position: fixed;
+  top: var(--space-xl);
+  right: var(--space-xl);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.toast {
+  padding: var(--space-lg) var(--space-xl);
+  border-radius: var(--radius-lg);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp var(--transition-base) ease;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  max-width: 360px;
+}
+
+.toast--success {
+  background: var(--color-success);
+}
+
+.toast--error {
+  background: var(--color-destructive);
+}
+
+.toast--warning {
+  background: var(--color-warning);
+}
+
+/* === DIKO KEYBOARD HINTS === */
+.kbd-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-muted-foreground);
+  background: var(--color-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* === DIKO QUICK TENDER (PEMBAYARAN TUNAI CEPAT) === */
+.quick-amounts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.quick-amount-btn {
+  min-height: 48px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--color-foreground);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-amount-btn:hover {
+  background: var(--color-muted);
+  border-color: var(--color-accent);
+}
+
+.quick-amount-btn:active {
+  transform: scale(0.97);
+}
+
+.quick-amount-btn.active {
+  background: rgba(79, 70, 229, 0.08);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.quick-amount-btn--exact {
+  background: rgba(5, 150, 105, 0.08);
+  border-color: var(--color-success);
+  color: var(--color-success);
+  font-weight: 700;
+}
+
+.quick-amount-btn--exact:hover {
+  background: rgba(5, 150, 105, 0.15);
+}
+
+/* === DIKO THERMAL RECEIPT 58MM PREVIEW === */
+.receipt-wrapper {
+  background: #262626;
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.receipt-paper {
+  background: #FFFDF9;
+  color: #1A1A1A;
+  font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  width: 100%;
+  max-width: 300px;
+  padding: 20px 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  border-radius: 2px 2px 0 0;
+}
+
+/* Efek robekan kertas thermal di bawah */
+.receipt-paper::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: radial-gradient(circle, transparent, transparent 50%, #FFFDF9 50%, #FFFDF9 100%);
+  background-size: 12px 20px;
+}
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.receipt-brand {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.receipt-sub {
+  font-size: 11px;
+  color: #4A4A4A;
+}
+
+.receipt-divider {
+  border-top: 1px dashed #71717A;
+  margin: 8px 0;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font-size: 11.5px;
+}
+
+.receipt-row--bold {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.receipt-item-name {
+  font-weight: 600;
+  color: #000000;
+}
+
+.receipt-item-detail {
+  display: flex;
+  justify-content: space-between;
+  color: #4B5563;
+  padding-left: 8px;
+  font-size: 11px;
+}
+
+/* === DIKO VARIANT & MODIFIER MODAL === */
+.variant-modal-section {
+  margin-bottom: var(--space-xl);
+}
+
+.variant-section-title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-foreground);
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.variant-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.variant-chip {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--color-foreground);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.variant-chip:hover {
+  background: var(--color-muted);
+  border-color: var(--color-accent);
+}
+
+.variant-chip.active {
+  background: rgba(79, 70, 229, 0.08);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.variant-price-tag {
+  font-size: var(--text-xs);
+  color: var(--color-muted-foreground);
+}
+
+.variant-chip.active .variant-price-tag {
+  color: var(--color-accent);
+}
+
+/* === DIKO SHIFT MODAL === */
+.shift-card {
+  background: var(--color-muted);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.shift-data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.shift-data-row:last-child {
+  border-bottom: none;
+}
+
+.shift-diff-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.shift-diff-badge--zero {
+  background: rgba(5, 150, 105, 0.1);
+  color: var(--color-success);
+}
+
+.shift-diff-badge--neg {
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--color-destructive);
+}
+
+.shift-diff-badge--pos {
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--color-accent);
+}
+
+/* === QRIS CONTAINER === */
+.qris-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-xl);
+  background: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.qris-image-mock {
+  width: 180px;
+  height: 180px;
+  background: #F8FAFC;
+  border: 2px solid #0F172A;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-md);
+  position: relative;
+}
+
+.qris-badge {
+  position: absolute;
+  top: 8px;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* === RESPONSIVE TWEAKS UNTUK IPAD & LAPTOP === */
+/* === RESPONSIVE LAYOUT UNTUK MOBILE, IPAD & LAPTOP === */
+
+/* Floating bar mobile default hide */
+.mobile-cart-bar {
+  display: none;
+}
+
+.mobile-cart-overlay {
+  display: none;
+}
+
+.mobile-drawer-header {
+  display: none;
+}
+
+/* Tablet portrait & Mobile (< 960px) */
+@media (max-width: 960px) {
+  :root {
+    --sidebar-width: 0px;
+    --cart-width: 100%;
+    --header-height: 52px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .header-bar {
+    padding: 0 var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .cashier-layout {
+    flex-direction: column;
+    position: relative;
+    height: calc(100vh - var(--header-height));
+    overflow: hidden;
+  }
+
+  .catalog-panel {
+    width: 100%;
+    height: 100%;
+  }
+
+  .catalog-grid-wrapper {
+    padding: 10px;
+    padding-bottom: 96px; /* Memberi ruang di atas floating bottom bar */
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .product-card {
+    min-height: 110px;
+    padding: 10px;
+  }
+
+  .product-card-name {
+    font-size: 13px;
+  }
+
+  /* Cart panel berubah menjadi slide-up bottom drawer di mobile */
+  .cart-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 82vh;
+    max-height: 82vh;
+    z-index: 150;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.25);
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+    transform: translateY(105%);
+    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cart-panel.mobile-open {
+    transform: translateY(0);
+  }
+
+  .mobile-cart-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(3px);
+    z-index: 140;
+    animation: fadeIn 200ms ease;
+  }
+
+  .mobile-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-muted);
+  }
+
+  /* Floating bottom bar di mobile */
+  .mobile-cart-bar {
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    height: 56px;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border-radius: var(--radius-xl);
+    padding: 0 var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.35);
+    z-index: 120;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 120ms ease;
+    user-select: none;
+  }
+
+  .mobile-cart-bar:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Tablet Landscape (961px - 1200px) */
+@media (min-width: 961px) and (max-width: 1200px) {
+  :root {
+    --sidebar-width: 54px;
+    --cart-width: 340px;
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+  }
+}
+
+/* Desktop besar (> 1400px) */
+@media (min-width: 1400px) {
+  :root {
+    --sidebar-width: 68px;
+    --cart-width: 420px;
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+  }
+}
+

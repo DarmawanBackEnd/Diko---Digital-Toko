@@ -1,0 +1,23 @@
+{
+  "name": "kasir-pintar",
+  "private": true,
+  "scripts": {
+    "dev:kasir": "pnpm --filter @kasir-pintar/kasir dev",
+    "dev:backoffice": "pnpm --filter @kasir-pintar/backoffice dev",
+    "build": "pnpm -r build",
+    "build:core": "pnpm --filter @kasir-pintar/core build",
+    "build:kasir": "pnpm --filter @kasir-pintar/kasir build",
+    "build:backoffice": "pnpm --filter @kasir-pintar/backoffice build",
+    "test": "pnpm -r test",
+    "test:core": "pnpm --filter @kasir-pintar/core test",
+    "lint": "pnpm -r lint",
+    "clean": "pnpm -r exec rm -rf dist node_modules .next"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "dependencies": {
+    "lucide-react": "^1.46.0"
+  }
+}
