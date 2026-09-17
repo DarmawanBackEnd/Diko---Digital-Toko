@@ -16,9 +16,9 @@ import {
   concatBytes,
   labelValueLine,
   separator,
-} from '../receipt/builder.js';
-import { buildReceipt, buildOpenDrawerCommand } from '../receipt/layout.js';
-import type { DataStruk } from '../types/index.js';
+} from '../receipt/builder';
+import { buildReceipt, buildOpenDrawerCommand } from '../receipt/layout';
+import type { DataStruk } from '../types/index';
 
 describe('ESC/POS constants', () => {
   it('ESC_INIT = 1B 40', () => {

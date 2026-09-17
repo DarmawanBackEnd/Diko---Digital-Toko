@@ -1,10 +1,11 @@
 // packages/core — Logika bersama untuk seluruh sistem POS Kasir Pintar
 // Berisi: tipe entitas, kalkulasi harga, builder struk ESC/POS, validasi Zod
 
-export * from './types/index.js';
-export * from './schemas/index.js';
-export * from './calculations/index.js';
-export * from './receipt/builder.js';
-export * from './receipt/layout.js';
-export * from './utils/uuid.js';
-export * from './utils/format.js';
+export * from './types/index';
+export * from './schemas/index';
+export * from './calculations/index';
+export * from './receipt/builder';
+export * from './receipt/layout';
+export * from './utils/uuid';
+export * from './utils/format';
+

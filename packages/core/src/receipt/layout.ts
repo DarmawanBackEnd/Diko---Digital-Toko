@@ -2,8 +2,8 @@
 // Menyusun data transaksi menjadi byte array ESC/POS siap cetak
 // Format sesuai template brief §7
 
-import type { DataStruk } from '../types/index.js';
-import { formatRupiah } from '../utils/format.js';
+import type { DataStruk } from '../types/index';
+import { formatRupiah } from '../utils/format';
 import {
   ESC_INIT,
   ESC_CUT,
@@ -19,7 +19,7 @@ import {
   boldText,
   ESC_LF,
   ESC_ALIGN_LEFT,
-} from './builder.js';
+} from './builder';
 
 /**
  * Bangun seluruh byte array struk dari data transaksi

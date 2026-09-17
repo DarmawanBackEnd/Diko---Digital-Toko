@@ -4,12 +4,30 @@
     "outDir": "./dist",
     "jsx": "preserve",
     "noEmit": true,
-    "plugins": [{ "name": "next" }],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@kasir-pintar/core": ["../../packages/core/src/index.ts"]
-    }
+      "@/*": [
+        "./src/*"
+      ],
+      "@kasir-pintar/core": [
+        "../../packages/core/src/index.ts"
+      ]
+    },
+    "allowJs": true,
+    "incremental": true
   },
-  "include": ["src/**/*", "next-env.d.ts", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "dist", ".next"]
+  "include": [
+    "src/**/*",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".next"
+  ]
 }

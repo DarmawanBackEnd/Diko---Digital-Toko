@@ -2,7 +2,7 @@
 // SATU-SATUNYA tempat logika harga — dipakai kasir dan backoffice
 // Jangan duplikasi logika ini di tempat lain (§4, aturan packages/core)
 
-import type { ItemKeranjang, InputTransaksi } from '../types/index.js';
+import type { ItemKeranjang, InputTransaksi } from '../types/index';
 
 /**
  * Hitung subtotal satu item keranjang

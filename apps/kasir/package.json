@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "pnpm --filter @kasir-pintar/core build",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },

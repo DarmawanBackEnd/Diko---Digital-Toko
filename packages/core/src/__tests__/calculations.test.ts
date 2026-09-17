@@ -9,8 +9,8 @@ import {
   validatePayment,
   calculateShiftBalance,
   generateNomorStruk,
-} from '../calculations/index.js';
-import type { ItemKeranjang, InputTransaksi } from '../types/index.js';
+} from '../calculations/index';
+import type { ItemKeranjang, InputTransaksi } from '../types/index';
 
 describe('calculateItemSubtotal', () => {
   it('menghitung subtotal tanpa diskon', () => {
