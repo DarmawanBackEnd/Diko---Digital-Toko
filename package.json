@@ -4,7 +4,8 @@
   "scripts": {
     "dev:kasir": "pnpm --filter @kasir-pintar/kasir dev",
     "dev:backoffice": "pnpm --filter @kasir-pintar/backoffice dev",
-    "build": "pnpm -r build",
+    "build": "pnpm -r build && node -e \"const fs=require('fs'); fs.cpSync('apps/kasir/dist', 'dist', {recursive: true});\"",
+    "build:vercel": "pnpm --filter @kasir-pintar/core build && pnpm --filter @kasir-pintar/kasir build && node -e \"const fs=require('fs'); fs.cpSync('apps/kasir/dist', 'dist', {recursive: true});\"",
     "build:core": "pnpm --filter @kasir-pintar/core build",
     "build:kasir": "pnpm --filter @kasir-pintar/kasir build",
     "build:backoffice": "pnpm --filter @kasir-pintar/backoffice build",
