@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   ChevronRight,
+  ChevronDown,
   SlidersHorizontal,
 } from 'lucide-react';
 import { formatRupiah } from '@kasir-pintar/core';
@@ -175,8 +176,10 @@ export function CashierPage() {
   const [receiptData, setReceiptData] = useState<ReceiptData | null>(null);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
   const [customDiscountInput, setCustomDiscountInput] = useState('');
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
 
   const currentUser = useAuthStore((state) => state.currentUser);
   const logout = useAuthStore((state) => state.logout);
@@ -242,6 +245,29 @@ export function CashierPage() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [searchQuery, items.length, showPayment, showShift, selectedProductForVariant, receiptData]);
+
+  // Tutup menu profil saat klik di luar atau tekan Escape
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target as Node)) {
+        setShowProfileMenu(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowProfileMenu(false);
+      }
+    };
+
+    if (showProfileMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showProfileMenu]);
 
   // Filter produk
   const filteredProducts = useMemo(() => {
@@ -452,25 +478,65 @@ export function CashierPage() {
               </span>
             </button>
 
-            {/* Kasir Aktif */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <div
-                style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: '50%',
-                  background: 'var(--color-accent)',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 11,
-                  fontWeight: 700,
-                }}
+            {/* Profil Akun Kasir & Menu Dropdown Logout */}
+            <div className="profile-menu-container" ref={profileMenuRef}>
+              <button
+                type="button"
+                className={`profile-btn ${showProfileMenu ? 'active' : ''}`}
+                onClick={() => setShowProfileMenu((prev) => !prev)}
+                aria-label="Menu Akun Kasir"
+                aria-expanded={showProfileMenu}
+                aria-haspopup="true"
               >
-                <User size={14} />
-              </div>
-              <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>{currentUser?.nama || 'Kasir'}</span>
+                <div className="profile-avatar">
+                  {currentUser?.nama ? currentUser.nama.charAt(0).toUpperCase() : <User size={13} />}
+                </div>
+                <span className="profile-name">{currentUser?.nama || 'Kasir'}</span>
+                <ChevronDown size={14} className="profile-chevron" />
+              </button>
+
+              {showProfileMenu && (
+                <div className="profile-dropdown" role="menu" aria-label="Menu Akun Kasir">
+                  <div className="profile-dropdown-header">
+                    <div className="profile-dropdown-user">{currentUser?.nama || 'Kasir'}</div>
+                    <div className="profile-dropdown-role">
+                      <span>{currentUser?.peran === 'owner' ? 'Owner / Admin' : 'Kasir Toko'}</span>
+                      <span>•</span>
+                      <span style={{ color: isShiftOpen ? 'var(--color-success)' : 'var(--color-destructive)', fontWeight: 600 }}>
+                        {isShiftOpen ? 'Shift Aktif' : 'Shift Tutup'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="profile-dropdown-item"
+                    role="menuitem"
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setShowShift(true);
+                    }}
+                  >
+                    <Clock size={16} />
+                    <span>Kelola Shift Kasir</span>
+                  </button>
+
+                  <div style={{ height: 1, background: 'var(--color-border)', margin: '4px 0' }} />
+
+                  <button
+                    type="button"
+                    className="profile-dropdown-item profile-dropdown-item--danger"
+                    role="menuitem"
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      logout();
+                    }}
+                  >
+                    <LogOut size={16} />
+                    <span>Keluar / Logout</span>
+                  </button>
+                </div>
+              )}
             </div>
           </header>
 
