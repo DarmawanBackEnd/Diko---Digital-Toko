@@ -107,10 +107,10 @@ export function doubleSizeText(text: string): Uint8Array {
 /**
  * Buat garis pemisah (32 karakter untuk 58mm)
  */
-export function separator(): Uint8Array {
+export function separator(char: string = '-'): Uint8Array {
   return concatBytes(
     ESC_ALIGN_LEFT,
-    encodeText('-'.repeat(32)),
+    encodeText(char.repeat(32)),
     ESC_LF
   );
 }

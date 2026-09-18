@@ -146,3 +146,32 @@ Khusus untuk tombol konfirmasi transaksi dan pembayaran kasir, digunakan warna h
 | `--space-md` | `12px` | Padding kartu produk |
 | `--space-lg` | `16px` | Gap grid produk & padding container |
 | `--space-xl` | `20px` | Padding modal & keranjang |
+
+---
+
+## 6. Standar Dual Receipt (Struk Pelanggan vs Tiket Dapur ESC/POS 58mm)
+
+Untuk mengakomodasi fleksibilitas operasional antara **Toko Retail** (hanya butuh 1 struk) dan **Restoran / Kedai Kopi** (butuh struk pelanggan + tiket dapur):
+
+### 6.1 Perbedaan Format & Filosofi Data
+
+| Komponen | Struk Pelanggan (Customer Receipt) | Tiket Dapur (Kitchen Order Ticket) |
+|---|---|---|
+| **Tujuan** | Bukti transaksi, legalitas pembayaran pelanggan | Eksekusi pesanan oleh koki / barista / kitchen crew |
+| **Lebar Cetak** | 32 karakter (Printer thermal Bluetooth 58mm) | 32 karakter (Printer thermal Bluetooth 58mm) |
+| **Header** | Nama & alamat toko, kontak outlet | Badge tebal: `** TIKET DAPUR **` + Jam Order |
+| **Identitas Meja** | Opsional di header info | Diberi penekanan tebal (contoh: `MEJA : 05`) |
+| **Daftar Item** | Nama item, Qty, harga satuan, subtotal, diskon | `[ Qty ]` tebal berjarak jelas + Nama Item + Catatan Varian |
+| **Rincian Uang** | Wajib: Subtotal, Total, Metode Bayar, Kembalian | **Dilarang keras**: Tidak memuat harga atau nominal uang |
+| **Footer** | Ucapan terima kasih & identitas sistem kasir | Ringkasan: `TOTAL ITEM: X Porsi` + Verifikasi |
+
+### 6.2 Standar UI/UX Modal Struk Kasir (`ReceiptModal`)
+1. **Segmented Switcher**: Tombol tab bergaya pill (`Struk Pelanggan` berikon `Receipt` dan `Tiket Dapur` berikon `ChefHat`).
+2. **Kertas Thermal Realistis**: Preview kertas struk monospaced dengan efek tepi robekan kertas thermal di bawah (`::after`).
+3. **Pilihan Cetak Fleksibel**:
+   - `Struk Kasir` (Ikon `Printer`): Hanya mencetak struk belanja pelanggan.
+   - `Tiket Dapur` (Ikon `ChefHat`): Hanya mencetak pesanan untuk dapur.
+   - `Cetak 2 Struk` (Ikon `Layers`): Mencetak keduanya berurutan.
+4. **Opsi Cepat Resto**: Checkbox *"Otomatis cetak tiket dapur setiap transaksi"* yang tersimpan di `localStorage`, sehingga restoran tidak perlu bolak-balik mengubah pengaturan.
+5. **Tombol Transaksi Baru**: Gradien hijau Emerald Kasir (`#059669` $\to$ `#047857`) ukuran penuh (min 48px touch target).
+

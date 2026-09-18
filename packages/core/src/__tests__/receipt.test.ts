@@ -17,7 +17,7 @@ import {
   labelValueLine,
   separator,
 } from '../receipt/builder';
-import { buildReceipt, buildOpenDrawerCommand } from '../receipt/layout';
+import { buildReceipt, buildOpenDrawerCommand, buildKitchenTicket } from '../receipt/layout';
 import type { DataStruk } from '../types/index';
 
 describe('ESC/POS constants', () => {
@@ -205,3 +205,80 @@ describe('buildOpenDrawerCommand', () => {
     expect(result[3]).toBe(0x70);
   });
 });
+
+describe('buildKitchenTicket', () => {
+  const kitchenData: DataStruk = {
+    nama_merchant: 'Kopi Kenangan',
+    alamat_merchant: 'Jl. Sudirman No. 10',
+    nomor_struk: 'D1-000456',
+    tanggal: '18/09/2026 16:45',
+    nama_kasir: 'Desia',
+    nomor_meja: 'Meja 05',
+    items: [
+      {
+        nama: 'Kopi Susu Aren (Dingin)',
+        qty: 2,
+        harga_satuan: 18000,
+        subtotal: 36000,
+        catatan: 'Less Ice, normal sugar',
+      },
+      {
+        nama: 'Roti Bakar Coklat',
+        qty: 1,
+        harga_satuan: 15000,
+        subtotal: 15000,
+        catatan: 'Extra keju',
+      },
+    ],
+    subtotal: 51000,
+    diskon: 0,
+    total: 51000,
+    metode_bayar: 'qris',
+    dibayar: 51000,
+    kembalian: 0,
+    catatan_pesanan: 'Pesanan antar cepat',
+  };
+
+  it('mengembalikan Uint8Array yang valid diawali ESC_INIT dan diakhiri ESC_CUT', () => {
+    const result = buildKitchenTicket(kitchenData);
+    expect(result).toBeInstanceOf(Uint8Array);
+    expect(result.length).toBeGreaterThan(0);
+    // Dimulai dengan ESC_INIT (1B 40)
+    expect(result[0]).toBe(0x1b);
+    expect(result[1]).toBe(0x40);
+    // Diakhiri dengan ESC_CUT (1D 56 42 00)
+    const len = result.length;
+    expect(result[len - 4]).toBe(0x1d);
+    expect(result[len - 3]).toBe(0x56);
+    expect(result[len - 2]).toBe(0x42);
+    expect(result[len - 1]).toBe(0x00);
+  });
+
+  it('memuat header TIKET DAPUR, nomor struk, nomor meja, item, dan total qty', () => {
+    const result = buildKitchenTicket(kitchenData);
+    const decoded = new TextDecoder().decode(result);
+
+    expect(decoded).toContain('TIKET DAPUR');
+    expect(decoded).toContain('D1-000456');
+    expect(decoded).toContain('Meja 05');
+    expect(decoded).toContain('Desia');
+    expect(decoded).toContain('Kopi Susu Aren (Dingin)');
+    expect(decoded).toContain('[ 2 ]');
+    expect(decoded).toContain('Less Ice, normal sugar');
+    expect(decoded).toContain('TOTAL ITEM');
+    expect(decoded).toContain('3');
+    expect(decoded).toContain('Pesanan antar cepat');
+  });
+
+  it('TIDAK memuat rincian harga atau uang untuk orang dapur', () => {
+    const result = buildKitchenTicket(kitchenData);
+    const decoded = new TextDecoder().decode(result);
+
+    // Dapur tidak boleh menampilkan rincian pembayaran/rupiah
+    expect(decoded).not.toContain('Subtotal');
+    expect(decoded).not.toContain('51.000');
+    expect(decoded).not.toContain('QRIS');
+    expect(decoded).not.toContain('Kembali');
+  });
+});
+

@@ -149,6 +149,7 @@ export interface ItemKeranjang {
   harga_satuan: number; // Harga dasar produk + selisih_harga varian
   qty: number;
   diskon: number; // Diskon per item dalam rupiah
+  catatan?: string; // Catatan item opsional (misal: "less sugar", "pedas")
 }
 
 export interface InputTransaksi {
@@ -173,6 +174,8 @@ export interface DataStruk {
   metode_bayar: MetodeBayar;
   dibayar: number;
   kembalian: number;
+  nomor_meja?: string; // Nomor meja jika restoran/kafe
+  catatan_pesanan?: string; // Catatan keseluruhan transaksi
 }
 
 export interface ItemStruk {
@@ -180,4 +183,5 @@ export interface ItemStruk {
   qty: number;
   harga_satuan: number;
   subtotal: number;
+  catatan?: string; // Catatan khusus item
 }

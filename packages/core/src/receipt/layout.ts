@@ -127,3 +127,91 @@ export function buildReceipt(data: DataStruk): Uint8Array {
 export function buildOpenDrawerCommand(): Uint8Array {
   return concatBytes(ESC_INIT, ESC_OPEN_DRAWER);
 }
+
+/**
+ * Bangun byte array tiket dapur (kitchen ticket) untuk printer thermal 58mm
+ * Khusus untuk operasional F&B / Resto / Cafe:
+ * - Menampilkan No Struk, Meja (jika ada), Waktu, Kasir
+ * - Menampilkan daftar pesanan & QTY dengan huruf tebal dan format jelas
+ * - Menampilkan catatan varian / pesanan jika ada
+ * - TANPA rincian harga / nominal uang (fokus eksekusi pesanan dapur)
+ */
+export function buildKitchenTicket(data: DataStruk): Uint8Array {
+  const parts: Uint8Array[] = [];
+
+  // Inisialisasi printer
+  parts.push(ESC_INIT);
+
+  // Header — TIKET PESANAN DAPUR (ukuran ganda, rata tengah)
+  parts.push(ESC_ALIGN_CENTER);
+  parts.push(doubleSizeText('TIKET DAPUR'));
+  parts.push(feed(1));
+
+  // Garis pemisah ganda
+  parts.push(separator('='));
+
+  // Info transaksi
+  parts.push(leftText(`No   : ${data.nomor_struk}`));
+  if (data.nomor_meja) {
+    parts.push(ESC_ALIGN_LEFT);
+    parts.push(boldText(`Meja : ${data.nomor_meja}`));
+    parts.push(ESC_LF);
+  }
+  parts.push(leftText(`Waktu: ${data.tanggal}`));
+  parts.push(leftText(`Kasir: ${data.nama_kasir}`));
+
+  // Garis pemisah
+  parts.push(separator());
+
+  // Header kolom pesanan
+  parts.push(ESC_ALIGN_LEFT);
+  parts.push(boldText('QTY  PESANAN'));
+  parts.push(ESC_LF);
+  parts.push(separator());
+
+  let totalQty = 0;
+
+  // Daftar item dapur
+  for (const item of data.items) {
+    totalQty += item.qty;
+    // Baris pesanan: [ QTY ] NAMA ITEM (tebal)
+    const qtyTag = `[ ${item.qty} ] `;
+    const itemLine = `${qtyTag}${item.nama}`;
+    parts.push(ESC_ALIGN_LEFT);
+    parts.push(boldText(itemLine));
+    parts.push(ESC_LF);
+
+    // Jika ada catatan khusus item
+    if (item.catatan) {
+      parts.push(leftText(`      * ${item.catatan}`));
+    }
+  }
+
+  // Garis pemisah
+  parts.push(separator());
+
+  // Ringkasan total kuantitas
+  parts.push(ESC_ALIGN_LEFT);
+  const itemLabel = 'TOTAL ITEM';
+  const itemValue = `${totalQty}`;
+  const itemSpaces = 32 - itemLabel.length - itemValue.length;
+  const itemLine = itemLabel + ' '.repeat(Math.max(1, itemSpaces)) + itemValue;
+  parts.push(boldText(itemLine));
+  parts.push(ESC_LF);
+
+  if (data.catatan_pesanan) {
+    parts.push(feed(1));
+    parts.push(ESC_ALIGN_LEFT);
+    parts.push(boldText(`Catatan: ${data.catatan_pesanan}`));
+    parts.push(ESC_LF);
+  }
+
+  parts.push(separator('='));
+
+  // Feed dan potong kertas
+  parts.push(feed(3));
+  parts.push(ESC_CUT);
+
+  return concatBytes(...parts);
+}
+
