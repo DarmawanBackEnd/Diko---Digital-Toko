@@ -2,6 +2,7 @@
 // Menggunakan icon murni dari lucide-react (Bebas Emoticon/Emoji)
 
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   LayoutGrid,
   Coffee,
@@ -22,6 +23,7 @@ import {
   ChevronRight,
   ChevronDown,
   SlidersHorizontal,
+  Package,
 } from 'lucide-react';
 import { formatRupiah } from '@kasir-pintar/core';
 import { useAuthStore } from '../stores/authStore';
@@ -31,195 +33,55 @@ import { PaymentModal } from '../components/PaymentModal';
 import { ReceiptModal, type ReceiptData } from '../components/ReceiptModal';
 import { VariantModal, type ProductItem } from '../components/VariantModal';
 import { ShiftModal } from '../components/ShiftModal';
-
-// Kategori Diko dengan icon resmi lucide-react
-const DUMMY_CATEGORIES = [
-  { id: 'all', nama: 'Semua Menu', icon: LayoutGrid },
-  { id: 'cat-1', nama: 'Kopi', icon: Coffee },
-  { id: 'cat-2', nama: 'Non-Kopi', icon: CupSoda },
-  { id: 'cat-3', nama: 'Makanan', icon: UtensilsCrossed },
-  { id: 'cat-4', nama: 'Snack', icon: Cookie },
-];
-
-const DUMMY_PRODUCTS: ProductItem[] = [
-  {
-    id: 'p1',
-    kategori_id: 'cat-1',
-    nama: 'Espresso',
-    harga: 15000,
-    variants: [
-      { id: 'v1', nama: 'Single', selisih_harga: 0 },
-      { id: 'v2', nama: 'Double Shot', selisih_harga: 5000 },
-    ],
-  },
-  {
-    id: 'p2',
-    kategori_id: 'cat-1',
-    nama: 'Americano',
-    harga: 18000,
-    variants: [
-      { id: 'v3', nama: 'Panas', selisih_harga: 0 },
-      { id: 'v4', nama: 'Dingin (Iced)', selisih_harga: 2000 },
-    ],
-  },
-  {
-    id: 'p3',
-    kategori_id: 'cat-1',
-    nama: 'Kopi Susu Diko',
-    harga: 22000,
-    variants: [
-      { id: 'v5', nama: 'Reguler (Dingin)', selisih_harga: 0 },
-      { id: 'v6', nama: 'Large (Dingin)', selisih_harga: 5000 },
-      { id: 'v7', nama: 'Panas (Hot)', selisih_harga: 0 },
-    ],
-  },
-  {
-    id: 'p4',
-    kategori_id: 'cat-1',
-    nama: 'Cappuccino',
-    harga: 25000,
-    variants: [
-      { id: 'v8', nama: 'Panas', selisih_harga: 0 },
-      { id: 'v9', nama: 'Dingin', selisih_harga: 2000 },
-    ],
-  },
-  {
-    id: 'p5',
-    kategori_id: 'cat-1',
-    nama: 'Caramel Latte',
-    harga: 28000,
-    variants: [
-      { id: 'v10', nama: 'Reguler', selisih_harga: 0 },
-      { id: 'v11', nama: 'Large', selisih_harga: 6000 },
-    ],
-  },
-  {
-    id: 'p6',
-    kategori_id: 'cat-2',
-    nama: 'Matcha Latte',
-    harga: 27000,
-    variants: [
-      { id: 'v12', nama: 'Dingin', selisih_harga: 0 },
-      { id: 'v13', nama: 'Panas', selisih_harga: 0 },
-    ],
-  },
-  {
-    id: 'p7',
-    kategori_id: 'cat-2',
-    nama: 'Coklat Belgia',
-    harga: 24000,
-    variants: [
-      { id: 'v14', nama: 'Dingin', selisih_harga: 0 },
-      { id: 'v15', nama: 'Panas', selisih_harga: 0 },
-    ],
-  },
-  {
-    id: 'p8',
-    kategori_id: 'cat-2',
-    nama: 'Es Teh Manis',
-    harga: 8000,
-  },
-  {
-    id: 'p9',
-    kategori_id: 'cat-2',
-    nama: 'Lemon Tea Segar',
-    harga: 14000,
-  },
-  {
-    id: 'p10',
-    kategori_id: 'cat-3',
-    nama: 'Roti Bakar Coklat Keju',
-    harga: 18000,
-  },
-  {
-    id: 'p11',
-    kategori_id: 'cat-3',
-    nama: 'Nasi Goreng Diko Spesial',
-    harga: 28000,
-  },
-  {
-    id: 'p12',
-    kategori_id: 'cat-3',
-    nama: 'Mie Goreng Telur',
-    harga: 22000,
-  },
-  {
-    id: 'p13',
-    kategori_id: 'cat-4',
-    nama: 'Kentang Goreng Krispi',
-    harga: 18000,
-  },
-  {
-    id: 'p14',
-    kategori_id: 'cat-4',
-    nama: 'Pisang Goreng Madu',
-    harga: 15000,
-  },
-  {
-    id: 'p15',
-    kategori_id: 'cat-4',
-    nama: 'Croissant Butter',
-    harga: 19000,
-  },
-  {
-    id: 'p16',
-    kategori_id: 'cat-1',
-    nama: 'Kopi Tubruk Gayo',
-    harga: 14000,
-  },
-  {
-    id: 'p17',
-    kategori_id: 'cat-1',
-    nama: 'Cold Brew Diko',
-    harga: 23000,
-  },
-  {
-    id: 'p18',
-    kategori_id: 'cat-2',
-    nama: 'Taro Milk Latte',
-    harga: 24000,
-    variants: [
-      { id: 'v16', nama: 'Dingin', selisih_harga: 0 },
-      { id: 'v17', nama: 'Panas', selisih_harga: 0 },
-    ],
-  },
-  {
-    id: 'p19',
-    kategori_id: 'cat-2',
-    nama: 'Red Velvet Cream',
-    harga: 25000,
-  },
-  {
-    id: 'p20',
-    kategori_id: 'cat-3',
-    nama: 'Toast Srikaya Butter',
-    harga: 16000,
-  },
-  {
-    id: 'p21',
-    kategori_id: 'cat-3',
-    nama: 'Ayam Geprek Matah',
-    harga: 29000,
-  },
-  {
-    id: 'p22',
-    kategori_id: 'cat-4',
-    nama: 'Singkong Goreng Keju',
-    harga: 15000,
-  },
-  {
-    id: 'p23',
-    kategori_id: 'cat-4',
-    nama: 'Donat Gula Klasik',
-    harga: 10000,
-  },
-];
+import { catalogService } from '../services/catalogService';
 
 export function CashierPage() {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentTime, setCurrentTime] = useState('');
   const [isMobileCartOpen, setIsMobileCartOpen] = useState(false);
+
+  // Dynamic Categories & Products dari catalogService
+  const [categoriesList, setCategoriesList] = useState(() => {
+    return [
+      { id: 'all', nama: 'Semua Menu' },
+      ...catalogService.getCategories().map((c) => ({ id: c.id, nama: c.nama })),
+    ];
+  });
+
+  const [productsList, setProductsList] = useState<ProductItem[]>(() => {
+    return catalogService.getProducts().map((p) => ({
+      id: p.id,
+      kategori_id: p.kategori_id || '',
+      nama: p.nama,
+      harga: p.harga,
+      variants: p.variants,
+    }));
+  });
+
+  // Reload katalog saat halaman kasir aktif / difokuskan
+  const refreshCatalog = useCallback(() => {
+    setCategoriesList([
+      { id: 'all', nama: 'Semua Menu' },
+      ...catalogService.getCategories().map((c) => ({ id: c.id, nama: c.nama })),
+    ]);
+    setProductsList(
+      catalogService.getProducts().map((p) => ({
+        id: p.id,
+        kategori_id: p.kategori_id || '',
+        nama: p.nama,
+        harga: p.harga,
+        variants: p.variants,
+      }))
+    );
+  }, []);
+
+  useEffect(() => {
+    refreshCatalog();
+    window.addEventListener('focus', refreshCatalog);
+    return () => window.removeEventListener('focus', refreshCatalog);
+  }, [refreshCatalog]);
 
   // Modals state
   const [showPayment, setShowPayment] = useState(false);
@@ -323,7 +185,7 @@ export function CashierPage() {
 
   // Filter produk
   const filteredProducts = useMemo(() => {
-    let list = DUMMY_PRODUCTS;
+    let list = productsList;
     if (activeCategory !== 'all') {
       list = list.filter((p) => p.kategori_id === activeCategory);
     }
@@ -332,7 +194,7 @@ export function CashierPage() {
       list = list.filter((p) => p.nama.toLowerCase().includes(q));
     }
     return list;
-  }, [activeCategory, searchQuery]);
+  }, [productsList, activeCategory, searchQuery]);
 
   // Dapatkan icon kategori untuk produk
   const getProductCategoryIcon = useCallback((catId: string) => {
@@ -419,6 +281,26 @@ export function CashierPage() {
             aria-label="Shift Kasir"
           >
             <Clock size={22} />
+          </button>
+
+          <button
+            type="button"
+            className="sidebar-btn"
+            title="Kelola Menu & Produk"
+            onClick={() => navigate('/produk')}
+            aria-label="Kelola Menu"
+          >
+            <UtensilsCrossed size={22} />
+          </button>
+
+          <button
+            type="button"
+            className="sidebar-btn"
+            title="Gudang & Stok Ledger"
+            onClick={() => navigate('/warehouse')}
+            aria-label="Gudang & Stok"
+          >
+            <Package size={22} />
           </button>
         </aside>
 
@@ -561,6 +443,32 @@ export function CashierPage() {
                     <span>Kelola Shift Kasir</span>
                   </button>
 
+                  <button
+                    type="button"
+                    className="profile-dropdown-item"
+                    role="menuitem"
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      navigate('/produk');
+                    }}
+                  >
+                    <UtensilsCrossed size={16} />
+                    <span>Kelola Menu & Produk</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="profile-dropdown-item"
+                    role="menuitem"
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      navigate('/warehouse');
+                    }}
+                  >
+                    <Package size={16} />
+                    <span>Gudang & Stok Ledger</span>
+                  </button>
+
                   <div style={{ height: 1, background: 'var(--color-border)', margin: '4px 0' }} />
 
                   <button
@@ -617,10 +525,16 @@ export function CashierPage() {
                 </div>
               </div>
 
-              {/* Kategori Pills dengan Lucide Icons */}
+              {/* Kategori Pills dengan Lucide Icons Dinamis */}
               <div className="category-tabs" role="tablist" aria-label="Kategori produk">
-                {DUMMY_CATEGORIES.map((cat) => {
-                  const IconComp = cat.icon;
+                {categoriesList.map((cat) => {
+                  let IconComp = LayoutGrid;
+                  const n = cat.nama.toLowerCase();
+                  if (n.includes('kopi') || n.includes('coffee')) IconComp = Coffee;
+                  else if (n.includes('non') || n.includes('minum') || n.includes('tea') || n.includes('soda')) IconComp = CupSoda;
+                  else if (n.includes('makan') || n.includes('food') || n.includes('nasi') || n.includes('mie')) IconComp = UtensilsCrossed;
+                  else if (n.includes('snack') || n.includes('roti') || n.includes('kue') || n.includes('camilan')) IconComp = Cookie;
+
                   return (
                     <button
                       key={cat.id}
