@@ -2170,11 +2170,60 @@ h1, h2, h3, h4, h5, h6 {
    DIKO BACKOFFICE & INVENTORY STYLES (INTEGRATED IN KASIR SPA)
    ============================================================ */
 
+.bo-page-container {
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  background: var(--color-latar);
+  display: flex;
+  flex-direction: column;
+}
+
+.bo-page-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.bo-page-container::-webkit-scrollbar-track {
+  background: var(--color-latar);
+}
+
+.bo-page-container::-webkit-scrollbar-thumb {
+  background: var(--color-garis);
+  border-radius: var(--radius-full);
+}
+
+.bo-page-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-redup);
+}
+
 .bo-table-wrapper {
   background: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.bo-table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.bo-table-wrapper::-webkit-scrollbar-track {
+  background: var(--color-latar-2);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+
+.bo-table-wrapper::-webkit-scrollbar-thumb {
+  background: var(--color-redup);
+  border-radius: var(--radius-full);
+}
+
+.bo-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--color-teks-2);
 }
 
 .bo-table {
@@ -2193,12 +2242,14 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.03em;
   border-bottom: 1px solid var(--color-border);
   background: var(--color-background);
+  white-space: nowrap;
 }
 
 .bo-table td {
   padding: var(--space-md) var(--space-lg);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-foreground);
+  vertical-align: middle;
 }
 
 .bo-table tr:last-child td {

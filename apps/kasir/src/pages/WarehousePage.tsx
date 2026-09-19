@@ -240,7 +240,7 @@ export function WarehousePage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--color-latar)', display: 'flex', flexDirection: 'column' }}>
+    <div className="bo-page-container">
       <AdminNavbar title="Gudang & Stok Ledger" />
 
       {/* Toast Notification */}
@@ -400,15 +400,15 @@ export function WarehousePage() {
             </div>
 
             <div className="bo-table-wrapper" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-              <table className="bo-table">
+              <table className="bo-table" style={{ minWidth: 800 }}>
                 <thead>
                   <tr>
-                    <th>Nama Produk / SKU</th>
-                    <th>Kategori</th>
-                    <th>Harga Satuan</th>
-                    <th>Total Stok Saat Ini</th>
-                    <th>Status Stok</th>
-                    <th style={{ textAlign: 'right' }}>Aksi Cepat</th>
+                    <th style={{ minWidth: 200 }}>Nama Produk / SKU</th>
+                    <th style={{ minWidth: 120 }}>Kategori</th>
+                    <th style={{ minWidth: 120 }}>Harga Satuan</th>
+                    <th style={{ minWidth: 150 }}>Total Stok Saat Ini</th>
+                    <th style={{ minWidth: 130 }}>Status Stok</th>
+                    <th style={{ minWidth: 140, textAlign: 'right' }}>Aksi Cepat</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -433,15 +433,15 @@ export function WarehousePage() {
                             )}
                           </div>
                         </td>
-                        <td>
+                        <td style={{ whiteSpace: 'nowrap' }}>
                           <span style={{ fontSize: '0.8125rem' }}>{item.kategori_nama}</span>
                         </td>
-                        <td>
+                        <td style={{ whiteSpace: 'nowrap' }}>
                           <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
                             {formatRupiahFull(item.harga)}
                           </span>
                         </td>
-                        <td>
+                        <td style={{ whiteSpace: 'nowrap' }}>
                           <span
                             style={{
                               fontFamily: 'var(--font-mono)',
@@ -460,7 +460,7 @@ export function WarehousePage() {
                             {item.total_stok} Unit
                           </span>
                         </td>
-                        <td>
+                        <td style={{ whiteSpace: 'nowrap' }}>
                           {item.status === 'aman' && (
                             <span className="bo-badge bo-badge--success">Aman ({item.total_stok})</span>
                           )}
@@ -476,7 +476,7 @@ export function WarehousePage() {
                             </span>
                           )}
                         </td>
-                        <td style={{ textAlign: 'right' }}>
+                        <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                             <button
                               type="button"
@@ -528,15 +528,15 @@ export function WarehousePage() {
             </div>
 
             <div className="bo-table-wrapper" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-              <table className="bo-table">
+              <table className="bo-table" style={{ minWidth: 720 }}>
                 <thead>
                   <tr>
-                    <th>Kode</th>
-                    <th>Nama Gudang / Lokasi</th>
-                    <th>Alamat / Detail</th>
-                    <th>Penanggung Jawab (PIC)</th>
-                    <th>Status</th>
-                    <th style={{ textAlign: 'right' }}>Aksi</th>
+                    <th style={{ minWidth: 90 }}>Kode</th>
+                    <th style={{ minWidth: 180 }}>Nama Gudang / Lokasi</th>
+                    <th style={{ minWidth: 180 }}>Alamat / Detail</th>
+                    <th style={{ minWidth: 150 }}>Penanggung Jawab (PIC)</th>
+                    <th style={{ minWidth: 90 }}>Status</th>
+                    <th style={{ minWidth: 90, textAlign: 'right' }}>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -637,16 +637,16 @@ export function WarehousePage() {
             </div>
 
             <div className="bo-table-wrapper" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-              <table className="bo-table">
+              <table className="bo-table" style={{ minWidth: 940 }}>
                 <thead>
                   <tr>
-                    <th>Waktu Mutasi</th>
-                    <th>Nama Produk</th>
-                    <th>Lokasi Gudang</th>
-                    <th>Jenis Mutasi</th>
-                    <th>No. Referensi / Dokumen</th>
-                    <th>Catatan</th>
-                    <th style={{ textAlign: 'right' }}>Kuantitas</th>
+                    <th style={{ minWidth: 140 }}>Waktu Mutasi</th>
+                    <th style={{ minWidth: 180 }}>Nama Produk</th>
+                    <th style={{ minWidth: 150 }}>Lokasi Gudang</th>
+                    <th style={{ minWidth: 130 }}>Jenis Mutasi</th>
+                    <th style={{ minWidth: 150 }}>No. Referensi / Dokumen</th>
+                    <th style={{ minWidth: 180 }}>Catatan</th>
+                    <th style={{ minWidth: 100, textAlign: 'right' }}>Kuantitas</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -659,7 +659,7 @@ export function WarehousePage() {
                   ) : (
                     filteredMovements.map((m) => (
                       <tr key={m.id}>
-                        <td>
+                        <td style={{ whiteSpace: 'nowrap' }}>
                           <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--color-teks-2)' }}>
                             {new Date(m.waktu_client).toLocaleString('id-ID', {
                               dateStyle: 'short',
@@ -672,10 +672,10 @@ export function WarehousePage() {
                             {m.produk_nama}
                           </span>
                         </td>
-                        <td>
+                        <td style={{ whiteSpace: 'nowrap' }}>
                           <span style={{ fontSize: '0.8125rem' }}>{m.gudang_nama || 'Gudang Utama'}</span>
                         </td>
-                        <td>
+                        <td style={{ whiteSpace: 'nowrap' }}>
                           {m.tipe === 'awal' && (
                             <span className="bo-badge bo-badge--success" style={{ display: 'inline-flex', gap: 4 }}>
                               <ArrowDownRight size={12} /> Stok Masuk
@@ -692,7 +692,7 @@ export function WarehousePage() {
                             </span>
                           )}
                         </td>
-                        <td>
+                        <td style={{ whiteSpace: 'nowrap' }}>
                           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>
                             {m.nomor_referensi || '-'}
                           </span>
@@ -702,7 +702,7 @@ export function WarehousePage() {
                             {m.catatan || '-'}
                           </span>
                         </td>
-                        <td style={{ textAlign: 'right' }}>
+                        <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                           <span
                             style={{
                               fontFamily: 'var(--font-mono)',

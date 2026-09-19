@@ -194,7 +194,7 @@ export function MenuPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--color-latar)', display: 'flex', flexDirection: 'column' }}>
+    <div className="bo-page-container">
       <AdminNavbar title="Manajemen Menu & Katalog" />
 
       {/* Toast Notification */}
@@ -319,15 +319,15 @@ export function MenuPage() {
 
         {/* Tabel Data Produk */}
         <div className="bo-table-wrapper" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <table className="bo-table">
+          <table className="bo-table" style={{ minWidth: 780 }}>
             <thead>
               <tr>
-                <th style={{ width: '30%' }}>Nama Menu / Produk</th>
-                <th style={{ width: '15%' }}>Kategori</th>
-                <th style={{ width: '15%' }}>Harga Dasar</th>
-                <th style={{ width: '20%' }}>Varian & Inventori</th>
-                <th style={{ width: '10%' }}>Status</th>
-                <th style={{ width: '10%', textAlign: 'right' }}>Aksi</th>
+                <th style={{ minWidth: 200 }}>Nama Menu / Produk</th>
+                <th style={{ minWidth: 120 }}>Kategori</th>
+                <th style={{ minWidth: 120 }}>Harga Dasar</th>
+                <th style={{ minWidth: 200 }}>Varian & Inventori</th>
+                <th style={{ minWidth: 90 }}>Status</th>
+                <th style={{ minWidth: 90, textAlign: 'right' }}>Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -358,7 +358,7 @@ export function MenuPage() {
                         )}
                       </div>
                     </td>
-                    <td>
+                    <td style={{ whiteSpace: 'nowrap' }}>
                       <span
                         style={{
                           display: 'inline-block',
@@ -372,7 +372,7 @@ export function MenuPage() {
                         {p.kategori_nama}
                       </span>
                     </td>
-                    <td>
+                    <td style={{ whiteSpace: 'nowrap' }}>
                       <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--color-enamel-900)' }}>
                         {formatRupiahFull(p.harga)}
                       </span>
@@ -391,10 +391,10 @@ export function MenuPage() {
                         </span>
                       </div>
                     </td>
-                    <td>
+                    <td style={{ whiteSpace: 'nowrap' }}>
                       <span className="bo-badge bo-badge--success">Aktif</span>
                     </td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                       <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                         <button
                           type="button"
