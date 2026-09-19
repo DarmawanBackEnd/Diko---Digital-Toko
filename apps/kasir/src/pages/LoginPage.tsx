@@ -95,85 +95,97 @@ export function LoginPage() {
         </div>
 
         {/* Pilih user */}
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 'var(--space-xs)' }}>
-          <label className="form-label" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted-foreground)' }}>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <label className="form-label" style={{ fontSize: 12, color: 'var(--color-teks-2)', fontWeight: 600 }}>
             Pilih Pengguna:
           </label>
-          <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
-            {DUMMY_USERS.map((user) => (
-              <button
-                key={user.id}
-                type="button"
-                className={`btn ${selectedUser === user.id ? 'btn-primary' : 'btn-secondary'}`}
-                onClick={() => {
-                  setSelectedUser(user.id);
-                  setPin('');
-                  setError('');
-                }}
-                style={{
-                  flex: 1,
-                  minHeight: 42,
-                  fontSize: 'var(--text-xs)',
-                  fontWeight: 600,
-                  background: selectedUser === user.id ? 'var(--color-primary)' : undefined,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 6,
-                }}
-              >
-                <User size={13} />
-                <span>{user.nama}</span>
-              </button>
-            ))}
+          <div style={{ display: 'flex', gap: 10 }}>
+            {DUMMY_USERS.map((user) => {
+              const isSelected = selectedUser === user.id;
+              return (
+                <button
+                  key={user.id}
+                  type="button"
+                  className={`btn ${isSelected ? 'btn-primary' : 'btn-secondary'}`}
+                  onClick={() => {
+                    setSelectedUser(user.id);
+                    setPin('');
+                    setError('');
+                  }}
+                  style={{
+                    flex: 1,
+                    minHeight: 46,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    borderRadius: 12,
+                    background: isSelected ? 'var(--color-primary)' : '#FFFFFF',
+                    color: isSelected ? '#FFFFFF' : 'var(--color-teks)',
+                    border: isSelected ? '1.5px solid var(--color-primary)' : '1.5px solid var(--color-garis)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                    cursor: 'pointer',
+                    boxShadow: isSelected ? '0 2px 8px rgba(22, 52, 58, 0.2)' : 'none',
+                    transition: 'all 0.15s ease-out',
+                  }}
+                >
+                  <User size={15} strokeWidth={2.2} />
+                  <span>{user.nama}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* PIN display (4 Dots) */}
+        {/* PIN display (4 Slot Indikator) */}
         <div className="pin-display">
-          {[0, 1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="pin-input"
-              style={{
-                borderColor: pin.length > i ? 'var(--color-accent)' : undefined,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 26,
-              }}
-            >
-              {pin.length > i ? '●' : ''}
-            </div>
-          ))}
+          {[0, 1, 2, 3].map((i) => {
+            const isFilled = pin.length > i;
+            return (
+              <div
+                key={i}
+                className={`pin-slot ${isFilled ? 'filled' : ''}`}
+                aria-label={`Digit PIN ${i + 1}`}
+              >
+                {isFilled && <div className="pin-dot" />}
+              </div>
+            );
+          })}
         </div>
 
         {/* Error message */}
         {error && (
-          <p style={{ color: 'var(--color-destructive)', fontSize: 'var(--text-xs)', fontWeight: 600 }}>
+          <div
+            style={{
+              color: 'var(--color-destructive)',
+              fontSize: 12.5,
+              fontWeight: 700,
+              background: 'rgba(184, 80, 75, 0.08)',
+              padding: '6px 14px',
+              borderRadius: 8,
+              border: '1px solid rgba(184, 80, 75, 0.2)',
+              marginTop: -6,
+            }}
+          >
             {error}
-          </p>
+          </div>
         )}
 
-        {/* Numpad Tablet Touchscreen */}
+        {/* Numpad Tablet Touchscreen — Ukuran Besar & Pas di Jari Kasir */}
         <div className="numpad">
           {['1', '2', '3', '4', '5', '6', '7', '8', '9', 'clear', '0', 'backspace'].map((key) => (
             <button
               key={key}
               type="button"
-              className={`numpad-btn ${key === 'clear' ? 'numpad-btn--danger' : ''}`}
+              className={`numpad-btn ${key === 'clear' ? 'numpad-btn--danger' : key === 'backspace' ? 'numpad-btn--action' : ''}`}
               onClick={() => handleNumpadPress(key)}
-              style={{
-                height: 54,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+              aria-label={key === 'clear' ? 'Hapus semua' : key === 'backspace' ? 'Hapus digit terakhir' : `Angka ${key}`}
             >
               {key === 'clear' ? (
                 'C'
               ) : key === 'backspace' ? (
-                <Delete size={20} />
+                <Delete size={22} strokeWidth={2.2} />
               ) : (
                 key
               )}
@@ -182,8 +194,21 @@ export function LoginPage() {
         </div>
 
         {/* Petunjuk PIN Default */}
-        <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted-foreground)', textAlign: 'center', display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Lock size={12} />
+        <div
+          style={{
+            fontSize: 12,
+            color: 'var(--color-teks-2)',
+            textAlign: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            background: 'var(--color-latar)',
+            padding: '6px 14px',
+            borderRadius: 20,
+            border: '1px solid var(--color-garis)',
+          }}
+        >
+          <Lock size={13} />
           <span>PIN Demo: <strong>1234</strong> (Desia) atau <strong>5678</strong> (Budi)</span>
         </div>
       </div>
