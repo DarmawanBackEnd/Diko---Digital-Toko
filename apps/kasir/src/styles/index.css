@@ -129,6 +129,8 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  height: 100dvh;
 }
 
 body {
@@ -137,7 +139,12 @@ body {
   line-height: var(--leading-normal);
   color: var(--color-foreground);
   background-color: var(--color-background);
+  height: 100%;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
   overflow: hidden; /* Kasir = layar penuh, tidak perlu scroll body */
+  -webkit-text-size-adjust: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -153,6 +160,7 @@ h1, h2, h3, h4, h5, h6 {
 .app-shell {
   display: flex;
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
   overflow: hidden;
 }
@@ -228,15 +236,18 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Area konten utama */
 .main-content {
-  flex: 1;
+  flex: 1 1 0%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   min-width: 0;
+  min-height: 0;
+  height: 100%;
 }
 
 /* Header bar — Sticky di posisi atas, tidak ikut ter-scroll */
 .header-bar {
+  flex-shrink: 0;
   height: var(--header-height);
   min-height: var(--header-height);
   background: var(--color-card);
@@ -436,22 +447,28 @@ h1, h2, h3, h4, h5, h6 {
 /* === LAYOUT KASIR (split view) === */
 
 .cashier-layout {
-  flex: 1;
+  flex: 1 1 0%;
   display: flex;
   overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+  height: calc(100% - var(--header-height));
 }
 
 /* Panel kiri — katalog produk */
 .catalog-panel {
-  flex: 1;
+  flex: 1 1 0%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   min-width: 0;
+  min-height: 0;
+  height: 100%;
 }
 
-/* Search bar katalog */
+/* Search bar katalog — Tetap diam di atas */
 .catalog-search {
+  flex-shrink: 0;
   padding: var(--space-lg) var(--space-xl);
   background: var(--color-card);
   border-bottom: 1px solid var(--color-border);
@@ -496,8 +513,9 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
 }
 
-/* Tab kategori */
+/* Tab kategori — Tetap diam di atas */
 .category-tabs {
+  flex-shrink: 0;
   display: flex;
   gap: 8px;
   padding: 10px var(--space-lg);
@@ -544,9 +562,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* === GRID PRODUK DIKO (RESPONSIF MOBILE & TABLET) === */
+/* HANYA area ini yang ber-scroll saat produk bertambah banyak */
 .catalog-grid-wrapper {
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
   padding: var(--space-md) var(--space-lg);
   -webkit-overflow-scrolling: touch;
 }
@@ -678,6 +699,7 @@ h1, h2, h3, h4, h5, h6 {
 .cart-panel {
   width: var(--cart-width);
   min-width: var(--cart-width);
+  height: 100%;
   background: var(--color-card);
   border-left: 1px solid var(--color-border);
   display: flex;
@@ -687,6 +709,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .cart-header {
+  flex-shrink: 0;
   padding: 14px var(--space-xl);
   border-bottom: 1px solid var(--color-border);
   display: flex;
@@ -747,12 +770,15 @@ h1, h2, h3, h4, h5, h6 {
   transform: scale(0.96);
 }
 
-/* Daftar item keranjang */
+/* Daftar item keranjang — Ber-scroll lancar antara header dan summary */
 .cart-items {
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
   padding: 4px 0;
   background: #FFFFFF;
+  -webkit-overflow-scrolling: touch;
 }
 
 .cart-items::-webkit-scrollbar {
@@ -962,16 +988,17 @@ h1, h2, h3, h4, h5, h6 {
   color: #94A3B8;
 }
 
-/* Footer / Ringkasan Keranjang */
+/* Footer / Ringkasan Keranjang — Tetap terpancang kokoh di bawah */
 .cart-summary,
 .cart-footer {
+  flex-shrink: 0;
   border-top: 1px solid var(--color-border);
-  padding: 16px var(--space-xl);
+  padding: 14px var(--space-lg);
   background: #FFFFFF;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.02);
+  gap: 8px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .summary-row,
@@ -1891,12 +1918,12 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
-/* Tablet portrait & Mobile (< 960px) */
-@media (max-width: 960px) {
+/* Mobile Phone Only (< 768px) */
+@media (max-width: 767px) {
   :root {
     --sidebar-width: 0px;
     --cart-width: 100%;
-    --header-height: 52px;
+    --header-height: 50px;
   }
 
   .sidebar {
@@ -1911,7 +1938,7 @@ h1, h2, h3, h4, h5, h6 {
   .cashier-layout {
     flex-direction: column;
     position: relative;
-    height: calc(100vh - var(--header-height));
+    height: calc(100% - var(--header-height));
     overflow: hidden;
   }
 
@@ -1921,17 +1948,17 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .catalog-grid-wrapper {
-    padding: 10px;
+    padding: 8px;
     padding-bottom: 96px; /* Memberi ruang di atas floating bottom bar */
   }
 
   .catalog-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
+    gap: 8px !important;
   }
 
   .product-card {
-    min-height: 110px;
+    min-height: 105px;
     padding: 10px;
   }
 
@@ -1945,8 +1972,9 @@ h1, h2, h3, h4, h5, h6 {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 82vh;
-    max-height: 82vh;
+    height: 85vh;
+    height: 85dvh;
+    max-height: 85dvh;
     z-index: 150;
     border-radius: 20px 20px 0 0;
     box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.25);
@@ -1977,6 +2005,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: var(--space-md) var(--space-lg);
     border-bottom: 1px solid var(--color-border);
     background: var(--color-muted);
+    flex-shrink: 0;
   }
 
   /* Floating bottom bar di mobile */
@@ -1985,7 +2014,7 @@ h1, h2, h3, h4, h5, h6 {
     bottom: 12px;
     left: 12px;
     right: 12px;
-    height: 56px;
+    height: 54px;
     background: var(--color-primary);
     color: var(--color-on-primary);
     border-radius: var(--radius-xl);
@@ -2006,29 +2035,134 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Tablet Landscape (961px - 1200px) */
-@media (min-width: 961px) and (max-width: 1200px) {
+/* Tablet Portrait & Tablet Sedang (768px - 1024px, misal iPad Mini, iPad 9th/10th, iPad Pro 11" Portrait) */
+@media (min-width: 768px) and (max-width: 1024px) {
   :root {
-    --sidebar-width: 54px;
-    --cart-width: 340px;
+    --sidebar-width: 48px;
+    --cart-width: 300px;
+    --header-height: 52px;
+  }
+
+  .sidebar {
+    display: flex;
+    padding: var(--space-sm) 0;
+  }
+
+  .sidebar-logo {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    margin-bottom: var(--space-md);
+  }
+
+  .sidebar-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .header-bar {
+    padding: 0 var(--space-lg);
+    gap: var(--space-md);
+  }
+
+  .catalog-search {
+    padding: 8px 14px;
+  }
+
+  .category-tabs {
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
+  .category-tab {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .catalog-grid-wrapper {
+    padding: 10px 12px;
   }
 
   .catalog-grid {
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 10px;
   }
+
+  .product-card {
+    min-height: 110px;
+    padding: 10px;
+  }
+
+  .cart-panel {
+    width: var(--cart-width);
+    min-width: var(--cart-width);
+  }
+
+  .cart-header {
+    padding: 10px 14px;
+    min-height: 48px;
+  }
+
+  .cart-item {
+    padding: 10px 14px;
+  }
+
+  .cart-summary {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .pay-btn {
+    min-height: 48px;
+    padding: 0 14px;
+    font-size: 14px;
+  }
 }
 
-/* Desktop besar (> 1400px) */
-@media (min-width: 1400px) {
+/* Tablet Landscape & Laptop Standar (1025px - 1280px, misal iPad 9/10/Air/Pro Landscape) */
+@media (min-width: 1025px) and (max-width: 1280px) {
   :root {
-    --sidebar-width: 68px;
-    --cart-width: 420px;
+    --sidebar-width: 52px;
+    --cart-width: 330px;
+    --header-height: 52px;
   }
 
   .catalog-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    gap: 10px;
+  }
+
+  .cart-panel {
+    width: var(--cart-width);
+    min-width: var(--cart-width);
+  }
+
+  .cart-summary {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .pay-btn {
+    min-height: 50px;
+  }
+}
+
+/* Desktop Besar (> 1280px) */
+@media (min-width: 1281px) {
+  :root {
+    --sidebar-width: 60px;
+    --cart-width: 360px;
+    --header-height: 56px;
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .cart-panel {
+    width: var(--cart-width);
+    min-width: var(--cart-width);
   }
 }
 

@@ -161,6 +161,58 @@ const DUMMY_PRODUCTS: ProductItem[] = [
     nama: 'Croissant Butter',
     harga: 19000,
   },
+  {
+    id: 'p16',
+    kategori_id: 'cat-1',
+    nama: 'Kopi Tubruk Gayo',
+    harga: 14000,
+  },
+  {
+    id: 'p17',
+    kategori_id: 'cat-1',
+    nama: 'Cold Brew Diko',
+    harga: 23000,
+  },
+  {
+    id: 'p18',
+    kategori_id: 'cat-2',
+    nama: 'Taro Milk Latte',
+    harga: 24000,
+    variants: [
+      { id: 'v16', nama: 'Dingin', selisih_harga: 0 },
+      { id: 'v17', nama: 'Panas', selisih_harga: 0 },
+    ],
+  },
+  {
+    id: 'p19',
+    kategori_id: 'cat-2',
+    nama: 'Red Velvet Cream',
+    harga: 25000,
+  },
+  {
+    id: 'p20',
+    kategori_id: 'cat-3',
+    nama: 'Toast Srikaya Butter',
+    harga: 16000,
+  },
+  {
+    id: 'p21',
+    kategori_id: 'cat-3',
+    nama: 'Ayam Geprek Matah',
+    harga: 29000,
+  },
+  {
+    id: 'p22',
+    kategori_id: 'cat-4',
+    nama: 'Singkong Goreng Keju',
+    harga: 15000,
+  },
+  {
+    id: 'p23',
+    kategori_id: 'cat-4',
+    nama: 'Donat Gula Klasik',
+    harga: 10000,
+  },
 ];
 
 export function CashierPage() {
@@ -367,18 +419,6 @@ export function CashierPage() {
             aria-label="Shift Kasir"
           >
             <Clock size={22} />
-          </button>
-
-          <div className="sidebar-spacer" />
-
-          <button
-            type="button"
-            className="sidebar-btn"
-            title="Ganti Kasir / Keluar"
-            onClick={logout}
-            aria-label="Keluar"
-          >
-            <LogOut size={20} />
           </button>
         </aside>
 
